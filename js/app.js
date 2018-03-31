@@ -1,14 +1,16 @@
-/* Initialize variables */
-/* Create a list that holds all of your cards
-/* List of 8 pairs of card faces */
-const cardFaces = [ 'anchor', 'anchor', 'bicycle', 'bicycle', 'bolt', 'bolt', 
-                    'bomb', 'bomb', 'cube', 'cube', 'diamond', 'diamond', 
+/* Initialize variables
+** Create a list that holds all of your cards
+** List of 8 pairs of card faces */
+const cardFaces = [ 'anchor', 'anchor', 'bicycle', 'bicycle', 'bolt', 'bolt',
+                    'bomb', 'bomb', 'cube', 'cube', 'diamond', 'diamond',
                     'leaf', 'leaf', 'paper-plane-o', 'paper-plane-o' ];
 let openCardList = [];
 /* Scoreboard */
 let moves=0;
 const stars = document.querySelector('.stars');
 let matchedCards=0;
+const playtime = document.querySelector('.playtime');
+let gameDuration = 0;
 
 /*
  * Display the cards on the page
@@ -18,7 +20,7 @@ let matchedCards=0;
  */
 // shuffle the faces
 const shuffledFaces = shuffle(cardFaces);
-// locate the deck un-numbered list and clear it 
+// locate the deck un-numbered list and clear it
 const deck = document.querySelector('.deck');
 deck.innerHTML='';
 // construct the list of new cards
@@ -28,8 +30,14 @@ for (face of shuffledFaces) {
 // create a NodeList of the live cards
 const cards = document.querySelectorAll('.card');
 
-//play the game
-main(); 
+for ( card of cards ) {
+  card.addEventListener('click', function() {
+    revealCard(this);
+  });
+}
+
+// play the game
+startGame();
 
 // functions
 // Shuffle function from http://stackoverflow.com/a/2450976
@@ -58,65 +66,73 @@ function shuffle(array) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
-function main() {
-	// add EventListener to each card
-  for ( card of cards ) {
-    card.addEventListener('click', function() {
-    	revealCard(this);
-    });
-  }
-  // now wait on click events
+function startGame() {
+  initScoreboard();
+  startTimer();
 }
 
 function revealCard(currCard) {
-	// reveal selected card
+  // reveal selected card
   currCard.classList.add('open', 'show');
   addCardToOpenList(currCard);
 }
 
 function addCardToOpenList(cardToAdd) {
-	openCardList.push(cardToAdd);
-	if (openCardList.length === 2) {
-		checkForMatch();
-		openCardList=[];
+  openCardList.push(cardToAdd);
+  if (openCardList.length === 2) {
+    checkForMatch();
     updateScoreboard();
-	}
+  }
 }
 
 function checkForMatch() {
-	// check if cards match
-	let cardName0 = openCardList[0].querySelector('i').classList[1];
-	let cardName1 = openCardList[1].querySelector('i').classList[1];
-	if (cardName0 == cardName1) {
-    lockCardsOpen();
-	}
+  // check if cards match
+  let cardName0 = openCardList[0].querySelector('i').classList[1];
+  let cardName1 = openCardList[1].querySelector('i').classList[1];
+  if (cardName0 == cardName1) {
+    setTimeout( function() {
+      lockCardsOpen();
+    }, 600 );
+  }
   else {
-    setTimeout(function() {releaseCards;},1000);
+    releaseCards();
+    setTimeout( function() {
+      openCardList=[];
+    }, 600);
   }
 }
 
 function lockCardsOpen() {
-	// remove the card's event listener
-	for (lockCard of openCardList) {
-	  lockCard.removeEventListener('click', function() { 
-			revealCard(this);
-		});
-		lockCard.classList.add('match');
+  // remove the card's event listener
+  for (lockCard of openCardList) {
+    lockCard.removeEventListener('click', function() {
+      revealCard(this);
+    });
+    lockCard.classList.add('match');
     lockCard.classList.remove('open', 'show');
     matchedCards++;
-  	console.log('locked: ' + lockCard.querySelector('i').classList );		
-	}
-  if (matchedCards == cardFaces.length) {
-    endOfGame();
-  }   
+    openCardList=[];
+    console.log('locked: ' + lockCard.querySelector('i').classList );
+    if (matchedCards == cardFaces.length) {
+      endOfGame();
+    }
+  }
 }
 
 function releaseCards() {
-	// hide card faces
-  for (releaseCard of openCardList ) {
-  	releaseCard.classList.remove('open', 'show');
-  	console.log(releaseCard.querySelector('i').classList[1]);
-  }
+  setTimeout( function() {
+    openCardList[0].classList.remove('open', 'show');
+  }, 600 );
+  setTimeout( function() {
+    openCardList[1].classList.remove('open', 'show');
+  }, 600 );
+}
+
+function initScoreboard() {
+  moves = 0;
+  gameDuration = 0;
+  document.querySelector('.moves').textContent = moves;
+  playtime.textContent = gameDuration;
 }
 
 function updateScoreboard() {
@@ -147,4 +163,22 @@ function loseStar(starNum) {
 function endOfGame() {
   // display popup summary and restart button
   console.log('Completed in ' + moves + ' moves');
+  stopTimer();
+}
+
+function startTimer() {
+  timer = 0;
+  gameTimer = window.setInterval(displayTimer, 1000);
+}
+
+function stopTimer() {
+  window.clearInterval(gameTimer);
+}
+
+function displayTimer() {
+  gameDuration++;
+  playtime.textContent = gameDuration;
+}
+
+function displayModal() {
 }
