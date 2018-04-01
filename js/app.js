@@ -5,12 +5,20 @@ const cardFaces = [ 'anchor', 'anchor', 'bicycle', 'bicycle', 'bolt', 'bolt',
                     'bomb', 'bomb', 'cube', 'cube', 'diamond', 'diamond',
                     'leaf', 'leaf', 'paper-plane-o', 'paper-plane-o' ];
 let openCardList = [];
-/* Scoreboard */
+
+/* scoreboard */
+let timerIsOn = false;
 let moves=0;
-const stars = document.querySelector('.stars');
 let matchedCards=0;
-const playtime = document.querySelector('.playtime');
 let gameDuration = 0;
+const stars = document.querySelector('.stars');
+const playtime = document.querySelector('.playtime');
+const restart = document.querySelector('.fa-repeat');
+// scoreboard restart button listener
+restart.addEventListener("click", function() {
+  window.location.reload(false);
+});
+
 
 /*
  * Display the cards on the page
@@ -30,14 +38,15 @@ for (face of shuffledFaces) {
 // create a NodeList of the live cards
 const cards = document.querySelectorAll('.card');
 
+// listen for card clicks
 for ( card of cards ) {
   card.addEventListener('click', function() {
     revealCard(this);
   });
 }
-
 // play the game
 startGame();
+// end of main code
 
 // functions
 // Shuffle function from http://stackoverflow.com/a/2450976
@@ -68,10 +77,14 @@ function shuffle(array) {
 
 function startGame() {
   initScoreboard();
-  startTimer();
 }
 
 function revealCard(currCard) {
+  // start timer on first card click
+  if ( timerIsOn == false ) {
+    timerIsOn = true;
+    startTimer();
+  }
   // reveal selected card
   currCard.classList.add('open', 'show');
   addCardToOpenList(currCard);
@@ -98,7 +111,7 @@ function checkForMatch() {
     releaseCards();
     setTimeout( function() {
       openCardList=[];
-    }, 600);
+    }, 600 );
   }
 }
 
@@ -133,6 +146,7 @@ function initScoreboard() {
   gameDuration = 0;
   document.querySelector('.moves').textContent = moves;
   playtime.textContent = gameDuration;
+  // initialise restart button
 }
 
 function updateScoreboard() {
@@ -168,7 +182,6 @@ function endOfGame() {
 }
 
 function startTimer() {
-  timer = 0;
   gameTimer = window.setInterval(displayTimer, 1000);
 }
 
@@ -176,13 +189,15 @@ function stopTimer() {
   window.clearInterval(gameTimer);
 }
 
+// TODO - Add a pause button that displays a 'paused' modal.
+
 function displayTimer() {
   gameDuration++;
   playtime.textContent = gameDuration;
 }
 
 function displayModal() {
-  // create a new document fragment and insert it on the page.
+  // create a new document fragment and insert it into the page.
   const modalFrag = document.createDocumentFragment();
   const modal = document.createElement('div');
   modal.classList = 'modal';
@@ -191,8 +206,8 @@ function displayModal() {
   modalSummary.innerHTML =`
     <h1>Game Summary</h1>
     <span>
-      <h3>Game duration ${gameDuration} Seconds</h3>
-      <h3>Total Clicks ${moves}</h3>
+      <h3>Time Taken ${gameDuration} Seconds</h3>
+      <h3>Total Moves ${moves}</h3>
     </span>
     <button class="restartButton">Play Again</button>
     <button class="exitButton">Exit Game</button>
@@ -201,4 +216,16 @@ function displayModal() {
   modal.appendChild(modalSummary);
   const container = document.querySelector('.container');
   container.appendChild(modalFrag);
+  // setup buttons
+  let playAgain = modalSummary.querySelector('.restartButton');
+  let exitButton = modalSummary.querySelector('.exitButton');
+  // setup button eventListeners
+  playAgain.addEventListener('click', function() {
+    window.location.reload(false);
+  });
+  exitButton.addEventListener('click', function() {
+    container.removeChild(modal);
+  });
 }
+
+// end of file
