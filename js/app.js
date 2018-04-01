@@ -164,6 +164,7 @@ function endOfGame() {
   // display popup summary and restart button
   console.log('Completed in ' + moves + ' moves');
   stopTimer();
+  displayModal();
 }
 
 function startTimer() {
@@ -181,4 +182,23 @@ function displayTimer() {
 }
 
 function displayModal() {
+  // create a new document fragment and insert it on the page.
+  const modalFrag = document.createDocumentFragment();
+  const modal = document.createElement('div');
+  modal.classList = 'modal';
+  const modalSummary = document.createElement('div');
+  modalSummary.classList = 'modalSummary';
+  modalSummary.innerHTML =`
+    <h1>Game Summary</h1>
+    <span>
+      <h3>Game duration ${gameDuration} Seconds</h3>
+      <h3>Total Clicks ${moves}</h3>
+    </span>
+    <button class="restartButton">Play Again</button>
+    <button class="exitButton">Exit Game</button>
+    `
+  modalFrag.appendChild(modal);
+  modal.appendChild(modalSummary);
+  const container = document.querySelector('.container');
+  container.appendChild(modalFrag);
 }

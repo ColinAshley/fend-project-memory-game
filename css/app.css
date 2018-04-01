@@ -109,3 +109,43 @@ h1 {
     float: right;
     cursor: pointer;
 }
+
+.moves {
+    padding-left: 2em;
+}
+
+.playtime {
+    padding-left: 2em;
+}
+
+.modal {
+    position: fixed;
+    width:  100%;
+    height:  100%;
+    opacity: 0.9;
+    background-color: lightgray;
+}
+
+.modalSummary {
+    background-color: white;
+    opacity:  1;
+    text-align: center;
+    margin: 40% auto;
+    padding: 2em 2em;
+    width: 50%;
+    border-radius: 10px;
+}
+
+.restartButton {
+    background-color: green;
+    color: white;
+    border:  none;
+    border-radius: 10px;
+}
+
+.exitButton {
+    background-color: red;
+    color: white;
+    border:  none;
+    border-radius: 10px;
+}
