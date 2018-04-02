@@ -173,9 +173,6 @@ function updateScoreboard() {
       loseStar(2);
       starsRemaining--;
       break;
-    case 25:
-      loseStar(3);
-      starsRemaining--;
     default:
       break;
   }
@@ -224,15 +221,14 @@ function displayModal() {
   const modalSummary = document.createElement('div');
   modalSummary.classList = 'modalSummary';
   modalSummary.innerHTML =`
-    <h1>Game Statistics</h1>
+    <h1>Congratulations, You Won!</h1>
     <div class="modalStars"></div>
     <span>
       <h3>Time Taken ${gameDuration} Seconds</h3>
       <h3>Total Moves ${moves}</h3>
     </span>
     <div>
-      <button class="restartButton">Play Again</button>
-      <button class="exitButton">Exit Game</button>
+      <button class="restartButton">Play Again!</button>
     </div>
     `;
   const modalStars = modalSummary.querySelector('.modalStars');
