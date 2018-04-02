@@ -1,6 +1,11 @@
+/* filename:    app.js
+** project:     FEND - memory game
+** author:      Colin Ashley
+** description: full game functionality
+*/
+
 /* Initialize variables
-** Create a list that holds all of your cards
-** List of 8 pairs of card faces */
+** List of 8 pairs of card faces.*/
 const cardFaces = [ 'anchor', 'anchor', 'bicycle', 'bicycle', 'bolt', 'bolt',
                     'bomb', 'bomb', 'cube', 'cube', 'diamond', 'diamond',
                     'leaf', 'leaf', 'paper-plane-o', 'paper-plane-o' ];
@@ -9,16 +14,16 @@ let openCardList = [];
 /* scoreboard */
 let timerIsOn = false;
 let moves=0;
+let starsRemaining=3;
 let matchedCards=0;
 let gameDuration = 0;
 const stars = document.querySelector('.stars');
 const playtime = document.querySelector('.playtime');
 const restart = document.querySelector('.fa-repeat');
-// scoreboard restart button listener
+// listen for scoreboard restart button click
 restart.addEventListener("click", function() {
   window.location.reload(false);
 });
-
 
 /*
  * Display the cards on the page
@@ -46,7 +51,8 @@ for ( card of cards ) {
 }
 // play the game
 startGame();
-// end of main code
+/* end of main code */
+
 
 // functions
 // Shuffle function from http://stackoverflow.com/a/2450976
@@ -75,6 +81,7 @@ function shuffle(array) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
+/* initialise the scoreboard */
 function startGame() {
   initScoreboard();
 }
@@ -90,6 +97,7 @@ function revealCard(currCard) {
   addCardToOpenList(currCard);
 }
 
+/* store open cards until match-check */
 function addCardToOpenList(cardToAdd) {
   openCardList.push(cardToAdd);
   if (openCardList.length === 2) {
@@ -98,6 +106,7 @@ function addCardToOpenList(cardToAdd) {
   }
 }
 
+/* check if cards match or mis-match */
 function checkForMatch() {
   // check if cards match
   let cardName0 = openCardList[0].querySelector('i').classList[1];
@@ -115,6 +124,7 @@ function checkForMatch() {
   }
 }
 
+/* cards match, so lock them open */
 function lockCardsOpen() {
   // remove the card's event listener
   for (lockCard of openCardList) {
@@ -132,6 +142,7 @@ function lockCardsOpen() {
   }
 }
 
+/* turn cards back to face-down position */
 function releaseCards() {
   setTimeout( function() {
     openCardList[0].classList.remove('open', 'show');
@@ -141,61 +152,70 @@ function releaseCards() {
   }, 600 );
 }
 
+/* clear the scoreboard */
 function initScoreboard() {
   moves = 0;
   gameDuration = 0;
   document.querySelector('.moves').textContent = moves;
   playtime.textContent = gameDuration;
-  // initialise restart button
 }
 
+/* update moves and dim star if level reached */
 function updateScoreboard() {
-  // update moves and dim star if necessary
   moves++;
   document.querySelector('.moves').textContent = moves;
   switch(moves) {
     case 15:
       loseStar(1);
+      starsRemaining--;
       break;
     case 20:
       loseStar(2);
+      starsRemaining--;
       break;
     case 25:
       loseStar(3);
+      starsRemaining--;
     default:
       break;
   }
 }
 
+/* dim right-most illuminated start */
 function loseStar(starNum) {
-  // dim right-most illuminated star
   let starList = stars.querySelectorAll('.fa-star');
   let dimStar = starList[starList.length-starNum];
   dimStar.style.color='silver';
 }
 
+
+/* stop timer and display game statistics */
 function endOfGame() {
-  // display popup summary and restart button
   console.log('Completed in ' + moves + ' moves');
   stopTimer();
   displayModal();
 }
 
+/* start the timer */
 function startTimer() {
   gameTimer = window.setInterval(displayTimer, 1000);
 }
 
+/* stop the timer */
 function stopTimer() {
   window.clearInterval(gameTimer);
 }
 
-// TODO - Add a pause button that displays a 'paused' modal.
+/* TODO - Add a pause button that displays a 'paused' modal
+** and a 'continue' button */
 
+/* display current game duration (in seconds) */
 function displayTimer() {
   gameDuration++;
   playtime.textContent = gameDuration;
 }
 
+/* build modal fragment and insert into document */
 function displayModal() {
   // create a new document fragment and insert it into the page.
   const modalFrag = document.createDocumentFragment();
@@ -204,14 +224,21 @@ function displayModal() {
   const modalSummary = document.createElement('div');
   modalSummary.classList = 'modalSummary';
   modalSummary.innerHTML =`
-    <h1>Game Summary</h1>
+    <h1>Game Statistics</h1>
+    <div class="modalStars"></div>
     <span>
       <h3>Time Taken ${gameDuration} Seconds</h3>
       <h3>Total Moves ${moves}</h3>
     </span>
-    <button class="restartButton">Play Again</button>
-    <button class="exitButton">Exit Game</button>
-    `
+    <div>
+      <button class="restartButton">Play Again</button>
+      <button class="exitButton">Exit Game</button>
+    </div>
+    `;
+  const modalStars = modalSummary.querySelector('.modalStars');
+  for (let starCount=0; starCount < starsRemaining; starCount++) {
+    modalStars.innerHTML += `<i class="fa fa-star"></i>`;
+  }
   modalFrag.appendChild(modal);
   modal.appendChild(modalSummary);
   const container = document.querySelector('.container');
