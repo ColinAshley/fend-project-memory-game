@@ -241,13 +241,9 @@ function displayModal() {
   container.appendChild(modalFrag);
   // setup buttons
   let playAgain = modalSummary.querySelector('.restartButton');
-  let exitButton = modalSummary.querySelector('.exitButton');
   // setup button eventListeners
   playAgain.addEventListener('click', function() {
     window.location.reload(false);
-  });
-  exitButton.addEventListener('click', function() {
-    container.removeChild(modal);
   });
 }
 
