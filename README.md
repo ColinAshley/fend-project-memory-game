@@ -1,20 +1,45 @@
 # Memory Game Project
 
+Udacity Front-End Web Dev Nano-Degree project 2. A card matching game that requires remembering the location of
+card faces and matching in pairs.
+
 ## Table of Contents
 
-* [Instructions](#instructions)
-* [Contributing](#contributing)
+* [Features](#features)
+* [Installation](#installation)
+* [Usage](#usage)
 
-## Instructions
+## Features
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+- Scoreboard
+  - live display of:
+    - Number of moves taken.
+    - Game duration.
+    - Achievement Star rating.
 
-To get started, open `js/app.js` and start building out the app's functionality
+- Game display
+  - Animated card reveal and release.
+  - Animated pair matching
 
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
+- Game completion
+  - Display of Game statistics:
+    - Total Moves.
+    - Total Game duration.
+    - Final Achievement Star rating.
+    - 'Play Again' and 'Exit Game' Buttons.
 
-## Contributing
+## Installation
 
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
+Download all the files to your local machine.
 
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+- git clone https://github.com/ColinAshley/fend-project-memory-game
+- cd fend-project-memory-game
+
+## Usage
+
+Open index.html using a browser.
+Game will begin on first card click
+
+## License
+
+Distributed under the MIT license.
