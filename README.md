@@ -16,6 +16,7 @@ card faces and matching in pairs.
     - Number of moves taken.
     - Game duration.
     - Achievement Star rating.
+    - Start new game at any time.
 
 - Game display
   - Animated card reveal and release.
@@ -26,7 +27,7 @@ card faces and matching in pairs.
     - Total Moves.
     - Total Game duration.
     - Final Achievement Star rating.
-    - 'Play Again' and 'Exit Game' Buttons.
+    - 'Play Again' Button.
 
 ## Installation
 

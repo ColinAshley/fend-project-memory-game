@@ -12,57 +12,50 @@ const cardFaces = [ 'anchor', 'anchor', 'bicycle', 'bicycle', 'bolt', 'bolt',
 let openCardList = [];
 
 /* scoreboard */
-let timerIsOn= false;
-let moves = 0;
-let starsRemaining = 3;
-let matchedCards = 0;
+let timerIsOn = false;
+let moves=0;
+let starsRemaining=3;
+let matchedCards=0;
 let gameDuration = 0;
-let gameTimer = 0;
-let cards = 0;
 const stars = document.querySelector('.stars');
 const playtime = document.querySelector('.playtime');
 const restart = document.querySelector('.fa-repeat');
-
 // listen for scoreboard restart button click
 restart.addEventListener("click", function() {
   stopTimer();
   startGame();
 });
 
-// play the game
-startGame();
-/* end of main code */
-
-
-// functions
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
-function shuffleNewPack() {
-  // shuffle the faces
-  let shuffledFaces = shuffle(cardFaces);
-  // locate the deck un-numbered list and clear it
-  let deck = document.querySelector('.deck');
-  deck.innerHTML='';
-  // construct the list of new cards
-  for (face of shuffledFaces) {
-    deck.innerHTML+='<li class="card"><i class="fa fa-'+ face +'"></i></li>';
+// shuffle the faces
+const shuffledFaces = shuffle(cardFaces);
+// locate the deck un-numbered list and clear it
+const deck = document.querySelector('.deck');
+deck.innerHTML='';
+// construct the list of new cards
+for (face of shuffledFaces) {
+  deck.innerHTML+='<li class="card"><i class="fa fa-'+ face +'"></i></li>';
   }
-  // create a NodeList of the live cards
-  cards = document.querySelectorAll('.card');
+// create a NodeList of the live cards
+const cards = document.querySelectorAll('.card');
 
-  // listen for card clicks
-  for ( card of cards ) {
-    card.addEventListener('click', function() {
+// listen for card clicks
+for ( card of cards ) {
+  card.addEventListener('click', function() {
     revealCard(this);
   });
 }
-}
+// play the game
+startGame();
+/* end of main code */
 
 
+// functions
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -91,7 +84,6 @@ function shuffle(array) {
 
 /* initialise the scoreboard */
 function startGame() {
-  shuffleNewPack();
   initScoreboard();
 }
 
@@ -167,19 +159,11 @@ function releaseCards() {
 
 /* clear the scoreboard */
 function initScoreboard() {
-  timerIsOn = false;
-  gameDuration = 0;
-  matchedCards = 0;
-  openCardList = [];
-  starsRemaining = 3;
   moves = 0;
-  // reset the scoreboard display
+  gameDuration = 0;
+  starsRemaining=0;
   document.querySelector('.moves').textContent = moves;
   playtime.textContent = gameDuration;
-  let resetStars = stars.querySelectorAll('.fa-star');
-  for ( resetStar of resetStars ) {
-    resetStar.style.color='gold';
-  }
 }
 
 /* update moves and dim star if level reached */
@@ -222,9 +206,7 @@ function startTimer() {
 
 /* stop the timer */
 function stopTimer() {
-  if ( timerIsOn = true ) {
-    window.clearInterval(gameTimer);
-  }
+  window.clearInterval(gameTimer);
 }
 
 /* TODO - Add a pause button that displays a 'paused' modal
@@ -267,7 +249,6 @@ function displayModal() {
   let playAgain = modalSummary.querySelector('.restartButton');
   // setup button eventListeners
   playAgain.addEventListener('click', function() {
-    container.removeChild(modal);
     startGame();
   });
 }
